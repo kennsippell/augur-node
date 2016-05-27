@@ -4,8 +4,13 @@
 function error_exit
 {
 	echo "$1" 1>&2
-	#exit 1
+	exit 1
 }
+
+AUGURUSER=$SUDO_USER
+HOMEDIR="/home/$AUGURUSER"
+
+cd $HOMEDIR
 
 ####################
 # Intsall Geth if not already installed
@@ -31,16 +36,19 @@ if [[ "" != "$gethPID" ]]; then
 	then
 		echo "killing geth"
 		#kill -9 $gethPID
-		#echo "thanks!"
 	else
 		error_exit  "augur_node requires you to let it manage geth. Abort!"
 	fi
 fi
 
-echo $SUDO_USER
+####################
+#Install and Start geth service
+####################
+sudo -u $AUGURUSER wget https://raw.githubusercontent.com/kevinday/augur_node/master/geth.conf
+sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" geth.conf
+cp geth.conf /etc/init/
+start geth
 
 
-#--check if geth already running. if so, prompt to kill it.
-#--download geth.conf, modify it, start it
 #--download ui build files, install in bin
 #--download augur_node.conf, start it.
