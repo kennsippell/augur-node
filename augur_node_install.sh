@@ -50,5 +50,34 @@ cp geth.conf /etc/init/
 start geth
 
 
+####################
+#Install nodejs
+####################
+time curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+time sudo apt-get install -y nodejs
+
+
+####################
+#Install marketeer
+####################
+time sudo apt-get -y install git
+time sudo apt-get -y install build-essential
+sudo -i -u $AUGURUSER git clone https://github.com/kevinday/marketeer.git
+sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
+
+####################
+#Install and Start augur_node service
+####################
+sudo -u $AUGURUSER wget https://raw.githubusercontent.com/kevinday/augur_node/master/augur_node.conf
+sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_user|$HOMEDIR/marketeer|g" augur_node.conf
+cp augur_node.conf /etc/init/
+start augur_node
+
 #--download ui build files, install in bin
 #--download augur_node.conf, start it.
+
+
+
+
+
