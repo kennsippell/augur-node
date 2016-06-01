@@ -29,7 +29,7 @@ command -v geth >/dev/null 2>&1 || {
 ####################
 gethPID=`ps -eaf | grep geth | grep -v grep | awk '{print $2}'`
 if [[ "" != "$gethPID" ]]; then
-	echo "Looks like geth is already running. augur_node manages geth for you"
+	echo "Looks like geth is already running. augur_node manages geth for you."
 	read -p "Can we restart geth? " -n 1 -r
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]
@@ -39,6 +39,15 @@ if [[ "" != "$gethPID" ]]; then
 	else
 		error_exit  "augur_node requires you to let it manage geth. Abort!"
 	fi
+fi
+
+####################
+#Create geth account (if there isn't one)
+####################
+accounts=`geth --testnet account list`
+if [[ "" == $accounts ]]; then
+	echo "Please set up a geth account."
+	geth --testnet account new
 fi
 
 ####################
@@ -70,7 +79,7 @@ sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
 ####################
 sudo -u $AUGURUSER wget https://raw.githubusercontent.com/kevinday/augur_node/master/augur_node.conf
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
-sudo -u $AUGURUSER sed -i "s|augur_node_user|$HOMEDIR/marketeer|g" augur_node.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.conf
 cp augur_node.conf /etc/init/
 start augur_node
 
