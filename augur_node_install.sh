@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 function error_exit
 {
 	echo "$1" 1>&2
@@ -35,7 +34,7 @@ if [[ "" != "$gethPID" ]]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		echo "killing geth"
-		#kill -9 $gethPID
+		kill -9 $gethPID
 	else
 		error_exit  "augur_node requires you to let it manage geth. Abort!"
 	fi
@@ -50,14 +49,23 @@ if [[ "" == $accounts ]]; then
 	geth --testnet account new
 fi
 
+#####################
+#Install git
+#####################
+time sudo apt-get -y install git
+
+#####################
+#Clone augur_node
+#####################
+sudo -i -u $AUGURUSER git clone https://github.com/AugurProject/augur_node.git
+cd augur_node
+
 ####################
 #Install and Start geth service
 ####################
-sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/geth.conf
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" geth.conf
 cp geth.conf /etc/init/
 start geth
-
 
 ####################
 #Install nodejs
@@ -65,26 +73,30 @@ start geth
 time curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 time sudo apt-get install -y nodejs
 
-
 ####################
-#Install marketeer
+#Open ports?
 ####################
-time sudo apt-get -y install git
-time sudo apt-get -y install build-essential
-sudo -i -u $AUGURUSER git clone https://github.com/AugurProject/marketeer.git
-sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
+#declare -a ports=("8545" "8546" "8547" "30303" "30304")
+#for port in "${ports[@]}"; do
+#    UDP="INPUT -p udp --dport ${port} -j ACCEPT"
+#    TCP="INPUT -p tcp --dport ${port} -j ACCEPT"
+#    set +e
+#    sudo iptables -D $UDP >> /dev/null 2>&1
+#   sudo iptables -D $TCP >> /dev/null 2>&1
+#    set -e
+#    sudo iptables -A $UDP
+#    sudo iptables -A $TCP
+#    echo -e "Opened port ${port}"
+#done
 
 ####################
 #Install and Start augur_node service
 ####################
-sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node.conf
+npm install requirements.txt
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
-sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/augur_node|g" augur_node.conf
 cp augur_node.conf /etc/init/
 start augur_node
-
-#--download ui build files, install in bin
-#--download augur_node.conf, start it.
 
 
 
