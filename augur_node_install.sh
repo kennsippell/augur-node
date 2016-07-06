@@ -75,15 +75,15 @@ time sudo apt-get install -y nodejs
 ####################
 #Install marketeer
 ####################
-time sudo apt-get -y install git build-essential
-sudo -i -u $AUGURUSER git clone https://github.com/AugurProject/marketeer.git
-sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
+#time sudo apt-get -y install git build-essential
+#sudo -i -u $AUGURUSER git clone https://github.com/AugurProject/marketeer.git
+#sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
 
 
 ####################
 #IStart augur_node service
 ####################
-start augur_node
+#start augur_node
 
 }
 
