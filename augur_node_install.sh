@@ -6,6 +6,8 @@ function error_exit
 	exit 1
 }
 
+setup() {
+
 AUGURUSER=$SUDO_USER
 HOMEDIR="/home/$AUGURUSER"
 
@@ -79,6 +81,10 @@ sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.con
 cp augur_node.conf /etc/init/
 start augur_node
 
+}
+
+##Wait to call setup until full file downloaded.
+setup
 
 
 
