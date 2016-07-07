@@ -51,14 +51,6 @@ if [[ "" == $accounts ]]; then
 fi
 
 ####################
-#Install augur_node service
-####################
-sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node.conf
-sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
-sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.conf
-cp augur_node.conf /etc/init/
-
-####################
 #Install and Start geth service
 ####################
 sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/geth.conf
@@ -79,10 +71,13 @@ time sudo apt-get -y install git build-essential
 sudo -i -u $AUGURUSER git clone https://github.com/AugurProject/marketeer.git
 sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
 
-
 ####################
-#IStart augur_node service
+#Install/Start augur_node service
 ####################
+sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node.conf
+sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.conf
+cp augur_node.conf /etc/init/
 start augur_node
 
 }
