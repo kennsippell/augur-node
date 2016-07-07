@@ -53,10 +53,10 @@ fi
 ####################
 #Install augur_node service
 ####################
-sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node.conf
-sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
-sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node.conf
-cp augur_node.conf /etc/init/
+sudo -u $AUGURUSER wget https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node_server.conf
+sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node_server.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/marketeer|g" augur_node_server.conf
+cp augur_node_server.conf /etc/init/
 
 ####################
 #Install and Start geth service
@@ -83,7 +83,7 @@ sudo -i -u $AUGURUSER  bash -c "cd marketeer; npm install"
 ####################
 #IStart augur_node service
 ####################
-start augur_node
+start augur_node_server
 
 }
 
