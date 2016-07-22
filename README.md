@@ -26,3 +26,5 @@ Your cache node will have the following endpoints available:
 `http://your_server:8547/getMarketInfo?id=id`
 
 `http://your_server:8547/getMarketPriceHistory?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
+
+`http://your_server:8547/getAccountTrades?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
