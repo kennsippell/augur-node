@@ -15,3 +15,16 @@ If you are setting this up on a new machine there will be a delay between when y
 You can test that your augur_node is working by navigating to `http://your_server:8547/getMarkets` in your browser.
 
 An augur_node does not manage your networking for you, so please verify that ports 8545 (geth rpc), 8546 (geth websockets), 8547 (augur_node) are open on your machine.
+
+# endpoints
+Your cache node will have the following endpoints available:
+
+`http://your_server:8547/getMarkets`
+
+`http://your_server:8547/batchGetMarketInfo?ids=id1,id2,id3...`
+
+`http://your_server:8547/getMarketInfo?id=id`
+
+`http://your_server:8547/getMarketPriceHistory?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
+
+`http://your_server:8547/getAccountTrades?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
