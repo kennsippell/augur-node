@@ -19,7 +19,7 @@ An augur_node does not manage your networking for you, so please verify that por
 # endpoints
 Your cache node will have the following endpoints available:
 
-`http://your_server:8547/getMarkets`
+`http://your_server:8547/getMarketsInfo?branch=branch_id` (branch param is optional. Will use default branch if not specified).
 
 `http://your_server:8547/batchGetMarketInfo?ids=id1,id2,id3...`
 
