@@ -12,7 +12,7 @@ When setup is complete, you will be left with two services: `geth` and `augur_no
 If you are setting this up on a new machine there will be a delay between when you installation is complete and when your cache server is available while augur_node waits for your blockchain to finish syncing. You can check the progress of this by doing: 
 ```sudo cat /var/log/upstart/augur_node.log```
 
-You can test that your augur_node is working by navigating to `http://your_server:8547/getMarkets` in your browser.
+You can test that your augur_node is working by navigating to `http://your_server:8547/getMarketsInfo` in your browser.
 
 An augur_node does not manage your networking for you, so please verify that ports 8545 (geth rpc), 8546 (geth websockets), 8547 (augur_node) are open on your machine.
 
