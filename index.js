@@ -148,16 +148,21 @@ process.on("uncaughtException", function (e) {
 });
 
 process.on("exit", function (code) {
-    mark.unwatch();
-    log(timestamp(chalk.red("Augur node shut down (" + code.toString() + ")\n")));
+     mark.unwatch( () => {
+        mark.disconnect( () => {
+            log(timestamp(chalk.red("Augur node shut down (" + code.toString() + ")\n")));
+        });
+    });
 });
 
 process.on("SIGINT", function () {
-    mark.unwatch();
-    log(timestamp(chalk.red("Augur node shut down (SIGINT)\n")));
-    process.exit(2);
+    mark.unwatch( () => {
+        mark.disconnect( () => {
+            log(timestamp(chalk.red("Augur node shut down (SIGINT)\n")));
+            process.exit(2);
+        })
+    })    
 });
-
 
 function runserver(protocol, port) {
     app.listen(port, function() {
