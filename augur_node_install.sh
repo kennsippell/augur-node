@@ -65,19 +65,19 @@ sudo -i -u $AUGURUSER  bash -c "cd augur_node; npm install"
 cd augur_node
 
 ####################
-#Install and Start geth service
+#Install geth service
 ####################
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" geth.conf
 cp geth.conf /etc/init/
-start geth
+
 
 ####################
-#Install/Start augur_node service
+#Install augur_node, start services
 ####################
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" augur_node.conf
 sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/augur_node|g" augur_node.conf
 cp augur_node.conf /etc/init/
-start augur_node
+start geth  #this will trigger augur_node to start too
 
 }
 
