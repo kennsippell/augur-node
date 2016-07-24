@@ -145,6 +145,7 @@ process.on("uncaughtException", function (e) {
         console.log(exc);
     }
     log('\n');
+    process.exit(1);
 });
 
 process.on("exit", function (code) {

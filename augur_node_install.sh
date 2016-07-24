@@ -68,6 +68,7 @@ cd augur_node
 #Install geth service
 ####################
 sudo -u $AUGURUSER sed -i "s/augur_node_user/$AUGURUSER/g" geth.conf
+sudo -u $AUGURUSER sed -i "s|augur_node_pwd|$HOMEDIR/augur_node|g" geth.conf
 cp geth.conf /etc/init/
 
 
