@@ -9,13 +9,13 @@ var dbname = "augur_cache_db";
 
 var config = {
     http: "http://localhost:8545",
-    ws: "http://127.0.0.1:8546",
+    //ws: "ws://127.0.0.1:8546",
+    ws: null,
     db: "./" + dbname,
     //ipc: process.env.GETH_IPC || join(DATADIR, "geth.ipc"),
     limit: null,
     filtering: true,
-    interval: null,
-    scan: true,
+    scan: false,
 }
 
 var app = express();
