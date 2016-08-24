@@ -9,8 +9,7 @@ var dbname = "augur_cache_db";
 
 var config = {
     http: "http://localhost:8545",
-    //ws: "ws://127.0.0.1:8546",
-    ws: null,
+    ws: "ws://localhost:8546",
     db: "./" + dbname,
     //ipc: process.env.GETH_IPC || join(DATADIR, "geth.ipc"),
     limit: null,

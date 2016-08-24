@@ -19,6 +19,7 @@ cd $HOMEDIR
 command -v geth >/dev/null 2>&1 || {
 	time sudo apt-get install -y software-properties-common
 	time sudo add-apt-repository -y ppa:ethereum/ethereum
+	time sudo add-apt-repository -y ppa:ethereum/ethereum-dev
 	time sudo apt-get update
 	time sudo apt-get install -y ethereum
 }
