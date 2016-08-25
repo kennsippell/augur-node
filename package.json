@@ -20,5 +20,6 @@
     "posix-getopt": "1.2.0"
   },
   "devDependencies": {
+    "request": "2.74.0"
   }
 }
