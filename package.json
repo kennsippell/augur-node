@@ -20,6 +20,8 @@
     "posix-getopt": "1.2.0"
   },
   "devDependencies": {
-    "request": "2.74.0"
+    "request": "2.74.0",
+    "chai": "^3.2.0",
+    "mocha": "^2.3.2"
   }
 }
