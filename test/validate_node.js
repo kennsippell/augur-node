@@ -54,6 +54,7 @@ function marketsInfoEqual(chain, cache){
 	return same;
 }
 
+/*
 describe("marketInfo", function () {
 	it("matches data on chain", function (done) {
 		this.timeout(TIMEOUT);
@@ -125,6 +126,37 @@ describe("priceHistory", function () {
 		});
 	});
 });
+*/
+
+describe("getMarketInfo", function () {
+	it("matches data on chain", function (done) {
+		this.timeout(TIMEOUT);
+
+		var markets = augur.getMarketsInBranch(augur.constants.DEFAULT_BRANCH_ID);
+		async.each(markets, function (id, nextMarket){
+			var chainHistory = augur.getMarketInfo(id);
+			if (chainHistory == null){
+				nextMarket();
+				return;
+			}
+			var url = node + "/getMarketInfo?id=" + id;
+			request(url, function (error, response, body) {
+				assert.isNull(error);
+				assert.deepEqual(response.statusCode, 200);
+		  		var cacheHistory = JSON.parse(body);
+		  		console.log(chainHistory);
+		  		console.log(cacheHistory);
+		  		assert.deepEqual(JSON.stringify(chainHistory), JSON.stringify(cacheHistory));
+		  		nextMarket();
+		  	});		
+		}, (err) => {
+			assert.isNull(err);
+			done();
+		});
+	});
+});
+
+
 
 
 

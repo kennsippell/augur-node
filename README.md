@@ -28,3 +28,9 @@ Your cache node will have the following endpoints available:
 `http://your_server:8547/getMarketPriceHistory?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
 
 `http://your_server:8547/getAccountTrades?id=id&toBlock=blocknum&fromBlock=blocknum` (to/fromBlock params are optional).
+
+# Updates
+To update your augur_node, run this from the command line:
+```
+curl -sL https://raw.githubusercontent.com/AugurProject/augur_node/master/augur_node_update.sh | bash
+```
