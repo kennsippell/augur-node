@@ -19,6 +19,12 @@ var config = {
 
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 function log(str) {
      console.log(chalk.cyan.dim("[augur]"), str);
 }
@@ -34,6 +40,12 @@ function isPositiveInt(str) {
 
 app.get('/getMarketsInfo', function (req, res) {
     var branch = req.query['branch'] || null;
+
+    //convert branch id to hex if int as passed in
+    if (branch && isPositiveInt(branch)){
+        branch = "0x" + parseInt(branch).toString(16)
+    }
+    console.log(branch)
     mark.getMarketsInfo(branch, function (err, markets){
         if (err){
             return res.status(500).send({ error: err });
