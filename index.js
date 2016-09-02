@@ -39,18 +39,35 @@ function isPositiveInt(str) {
 }
 
 app.get('/getMarketsInfo', function (req, res) {
-    var branch = req.query['branch'] || null;
 
-    //convert branch id to hex if int as passed in
-    if (branch && isPositiveInt(branch)){
-        branch = "0x" + parseInt(branch).toString(16)
-    }
-    console.log(branch)
-    mark.getMarketsInfo(branch, function (err, markets){
-        if (err){
-            return res.status(500).send({ error: err });
+    var options = {};
+
+    for (var key in req.query) {
+        if (req.query.hasOwnProperty(key)) {
+            var params = req.query[key].split(',');
+            if (params.length < 2) continue;
+            options[key] = params;
         }
-        return res.send(markets);
+    }
+
+    //require branch
+    if (!options['branchId']){
+        options['branchId'] = ['eq', mark.augur.constants.DEFAULT_BRANCH_ID];
+    }
+    //convert branch id to hex if int as passed in
+    if (isPositiveInt(options['branchId'][1])){
+        options['branchId'][1] = "0x" + parseInt(options['branchId'][1]).toString(16);
+    }
+
+    mark.getMarketsInfo(options, (err, stream) => {
+        if (err){
+           return res.status(500).send({ error: err });
+        }
+        stream.on('data', (data) => {
+            res.write(data);
+        }).on('end', () => {
+            res.end();
+        });            
     });
 });
 
