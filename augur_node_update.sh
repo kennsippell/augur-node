@@ -14,12 +14,6 @@ sudo stop augur_node
 sudo stop geth
 
 #####################
-# Apply updates
-#####################
-sudo apt-get update
-sudo apt-get upgrade -y
-
-#####################
 # Install latest augur_node
 #####################
 cd $HOMEDIR/augur_node
@@ -34,6 +28,5 @@ rm -rf data/augur_cache_db
 #####################
 sudo start geth
 #augur_node gets started automatically
-
 
 echo "finished augur_node update"
