@@ -19,7 +19,10 @@ An augur_node does not manage your networking for you, so please verify that por
 # endpoints
 Your cache node will have the following endpoints available:
 
-`http://your_server:8547/getMarketsInfo?branch=branch_id` (branch param is optional. Will use default branch if not specified).
+`http://your_server:8547/getMarketsInfo?branchId=eq,branch` You can continue to filter your results in this way, in the format field=op,value.
+So for example:
+
+`http://your_server:8547/getMarketsInfo?branchId=eq,1010101&volume=gt,0&tradingFee=lte,.02`
 
 `http://your_server:8547/batchGetMarketInfo?ids=id1,id2,id3...`
 
