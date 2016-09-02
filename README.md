@@ -23,6 +23,7 @@ Your cache node will have the following endpoints available:
 So for example:
 
 `http://your_server:8547/getMarketsInfo?branchId=eq,1010101&volume=gt,0&tradingFee=lte,.02`
+Supported operands are `lt` `lte` `gt` `gte` `eq`.
 
 `http://your_server:8547/batchGetMarketInfo?ids=id1,id2,id3...`
 
