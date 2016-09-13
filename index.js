@@ -13,7 +13,7 @@ var config = {
     //ipc: process.env.GETH_IPC || join(DATADIR, "geth.ipc"),
     limit: null,
     filtering: true,
-    scan: false,
+    scan: true,
 }
 
 var app = express();
