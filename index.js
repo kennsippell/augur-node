@@ -3,18 +3,17 @@ var getopt = require("posix-getopt");
 var chalk = require("chalk");
 var express = require('express');
 var join = require("path").join;
-var mark = require("marketeer");
+var index = require("./market_index");
 
 var dbname = "augur_cache_db";
 
 var config = {
     http: "http://localhost:8545",
     ws: "ws://localhost:8546",
-    db: "./" + dbname,
     //ipc: process.env.GETH_IPC || join(DATADIR, "geth.ipc"),
     limit: null,
     filtering: true,
-    scan: true,
+    scan: false,
 }
 
 var app = express();
@@ -38,130 +37,43 @@ function isPositiveInt(str) {
     return String(n) === str && n >= 0;
 }
 
+function toBool(str){
+    return str == "true";
+}
+
 app.get('/getMarketsInfo', function (req, res) {
 
     var options = {};
+    options.branchId = req.query['branchId'] || index.augur.constants.DEFAULT_BRANCH_ID;
+    options.active = req.query['active'];
+    options.page = req.query['page'];
+    options.limit = req.query['limit'];
+    options.query = req.query['query'];
 
-    for (var key in req.query) {
-        if (req.query.hasOwnProperty(key)) {
-            var params = req.query[key].split(',');
-            if (params.length < 2) continue;
-            options[key] = params;
-        }
-    }
+    if (options.active) options.active = toBool(options.active);
 
-    //require branch
-    if (!options['branchId']){
-        options['branchId'] = ['eq', mark.augur.constants.DEFAULT_BRANCH_ID];
-    }
     //convert branch id to hex if int as passed in
-    if (isPositiveInt(options['branchId'][1])){
-        options['branchId'][1] = "0x" + parseInt(options['branchId'][1]).toString(16);
+    if (isPositiveInt(options['branchId'])){
+        options['branchId'] = "0x" + parseInt(options['branchId']).toString(16);
     }
 
-    mark.getMarketsInfo(options, (err, stream) => {
-        if (err){
-           return res.status(500).send({ error: err });
-        }
-        stream.on('data', (data) => {
-            res.write(data);
-        }).on('end', () => {
-            res.end();
-        });            
-    });
-});
-
-app.get('/getMarketInfo', function (req, res) {
-    var id = req.query['id']
-    if (!id) res.status(500).send({ error: "You must specify an ID" });
-    mark.getMarketInfo(id, function (err, market){
-        if (err){
-            return res.status(500).send({ error: err });
-        }
-        return res.send(market);
-    });
-});
-
-app.get('/batchGetMarketInfo', function (req, res) {
-    var idsParam = req.query['ids'];
-    if (!idsParam) return res.status(500).send({ error: "You must specify a list of ids" });
-    var ids = idsParam.split(',');
-    mark.batchGetMarketInfo(ids, function (err, markets) {
-        if (err){
-            return res.status(500).send({ error: err });
-        }
-        return res.send(markets);
-    });
-});
-
-app.get('/getMarketPriceHistory', function (req, res) {
-    var id = req.query['id'];
-    if (!id) res.status(500).send({ error: "You must specify an id" });
-
-    //optional params
-    var to = req.query['toBlock'];
-    var from = req.query['fromBlock'];
-
-    if (!to && !from){
-        mark.getMarketPriceHistory(id, function (err, history) {
+    //if query passed in, it's a search. Otherwise it's a filter
+    if (options.query){
+        index.marketSearch(options, (err, response) => {
             if (err){
-                return res.status(500).send({ error: err });
+               return res.status(500).send({ error: err });
             }
-            return res.send(history);
-        });        
+            return res.send(response);   
+        });
     }else{
-        //if to/from aren't numbers, pass in null instaead
-        to = parseInt(to);
-        from = parseInt(from);
-        if (isNaN(to)) to = null;
-        if (isNaN(from)) from = null;
-
-        var options = {
-            toBlock: to,
-            fromBlock: from
-        }
-        mark.getMarketPriceHistory(id, options, function (err, history) {
+        index.loadMarkets(options, (err, response) => {
             if (err){
-                return res.status(500).send({ error: err });
+               return res.status(500).send({ error: err });
             }
-            return res.send(history);
+            return res.send(response);   
         });
     }
-});
 
-app.get('/getAccountTrades', function (req, res) {
-    var id = req.query['id'];
-    if (!id) res.status(500).send({ error: "You must specify an id" });
-
-    //optional params
-    var to = req.query['toBlock'];
-    var from = req.query['fromBlock'];
-
-    if (!to && !from){
-        mark.getAccountTrades(id, function (err, trades) {
-            if (err){
-                return res.status(500).send({ error: err });
-            }
-            return res.send(trades);
-        });        
-    }else{
-        //if to/from aren't numbers, pass in null instaead
-        to = parseInt(to);
-        from = parseInt(from);
-        if (isNaN(to)) to = null;
-        if (isNaN(from)) from = null;
-
-        var options = {
-            toBlock: to,
-            fromBlock: from
-        }
-        mark.getAccountTrades(id, options, function (err, trades) {
-            if (err){
-                return res.status(500).send({ error: err });
-            }
-            return res.send(trades);
-        });
-    }
 });
 
 process.on("uncaughtException", function (e) {
@@ -177,16 +89,16 @@ process.on("uncaughtException", function (e) {
 });
 
 process.on("exit", function (code) {
-     mark.unwatch( () => {
-        mark.disconnect( () => {
+     index.unwatch( () => {
+        index.disconnect( () => {
             log(timestamp(chalk.red("Augur node shut down (" + code.toString() + ")\n")));
         });
     });
 });
 
 process.on("SIGINT", function () {
-    mark.unwatch( () => {
-        mark.disconnect( () => {
+    index.unwatch( () => {
+        index.disconnect( () => {
             log(timestamp(chalk.red("Augur node shut down (SIGINT)\n")));
             process.exit(2);
         })
@@ -218,12 +130,12 @@ function runserver(protocol, port) {
                 config.db = dir + dbname;
         }
     }
+    runserver(protocol || "http", port || process.env.PORT || 8547);
     //to be safe, rescan on every restart. Markets might have updated
     //when node was down.
-    mark.watch(config, function (err, numUpdates) {
+    index.watch(config, function (err, numUpdates) {
         if (err) throw err;
         log(numUpdates + " markets have been updated!");
-        runserver(protocol || "http", port || process.env.PORT || 8547);
     });
 
 })(process.argv);
