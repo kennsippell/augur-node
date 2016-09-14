@@ -5,8 +5,6 @@ var express = require('express');
 var join = require("path").join;
 var index = require("./market_index");
 
-var dbname = "augur_cache_db";
-
 var config = {
     http: "http://localhost:8545",
     ws: "ws://localhost:8546",
@@ -125,9 +123,6 @@ function runserver(protocol, port) {
             case 'n':
                 config.scan = null;
                 break;
-            case 'd':
-                dir = opt.optarg;
-                config.db = dir + dbname;
         }
     }
     runserver(protocol || "http", port || process.env.PORT || 8547);
