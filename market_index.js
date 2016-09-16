@@ -26,18 +26,24 @@ module.exports = {
 
     market_index_version: 1,
 
+    elastic_host: process.env.ELASTIC_HOST || 'localhost',
+    elastic_port: process.env.ELASTIC_PORT || '9200',
+    elastic_endpoint: 'http://' + elastic_host + ':' + elastic_port;
+
     connect: function (config, callback) {
         var self = this;
         callback = callback || noop;
 
         self.market_index = "markets";
 
+        var 
+        console.log(elastic_endpoint);
         self.augur.connect(config, () => {
             self.augur.rpc.debug.abi = true;
             self.augur.rpc.retryDroppedTxs = true;
             self.augur.rpc.POST_TIMEOUT = 120000;
             //self.augur.rpc.debug.broadcast = true;
-            self.elastic = new elasticsearch.Client({host: 'localhost:9200'});
+            self.elastic = new elasticsearch.Client({host: elastic_endpoint, maxRetries: 5});
             //self.initScripts();
             self.initMarketIndex(callback);
         });
