@@ -1,0 +1,17 @@
+elasticsearch:
+    image: elasticsearch:latest
+    command: elasticsearch -Des.network.host=0.0.0.0
+    volumes:
+        - elasticsearch1:/usr/share/elasticsearch/data
+    #ports:
+    #    - "0.0.0.0:9200:9200"
+
+augur_node:
+    build: .
+    volumes:
+        - .:/home/augur
+        - /home/augur/node_modules
+    ports:
+        - '8547:8547'
+    links:
+        - elasticsearch
