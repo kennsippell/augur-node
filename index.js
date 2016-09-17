@@ -5,9 +5,11 @@ var express = require('express');
 var join = require("path").join;
 var index = require("./market_index");
 
+var geth_host = process.env.GETH_HOST || "localhost";
+
 var config = {
-    http: "http://localhost:8545",
-    ws: "ws://localhost:8546",
+    http: 'http://' + geth_host + ':8545',
+    ws: 'ws://' + geth_host + ':8546',
     //ipc: process.env.GETH_IPC || join(DATADIR, "geth.ipc"),
     limit: null,
     filtering: true,

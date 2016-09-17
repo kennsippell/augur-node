@@ -26,9 +26,6 @@ module.exports = {
 
     market_index_version: 1,
 
-    elastic_host: process.env.ELASTIC_HOST || 'localhost',
-    elastic_port: process.env.ELASTIC_PORT || '9200',
-    elastic_endpoint: 'http://' + elastic_host + ':' + elastic_port;
 
     connect: function (config, callback) {
         var self = this;
@@ -36,8 +33,12 @@ module.exports = {
 
         self.market_index = "markets";
 
-        var 
-        console.log(elastic_endpoint);
+        var elastic_host = process.env.ELASTIC_HOST || 'localhost';
+        var elastic_port = process.env.ELASTIC_PORT || '9200';
+        var elastic_endpoint = 'http://' + elastic_host + ':' + elastic_port;
+
+
+        console.log(this.elastic_endpoint);
         self.augur.connect(config, () => {
             self.augur.rpc.debug.abi = true;
             self.augur.rpc.retryDroppedTxs = true;
