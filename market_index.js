@@ -38,7 +38,7 @@ module.exports = {
         var elastic_endpoint = 'http://' + elastic_host + ':' + elastic_port;
 
 
-        console.log(this.elastic_endpoint);
+        console.log(elastic_endpoint);
         self.augur.connect(config, () => {
             self.augur.rpc.debug.abi = true;
             self.augur.rpc.retryDroppedTxs = true;

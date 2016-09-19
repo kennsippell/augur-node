@@ -1,18 +1,24 @@
 elasticsearch:
     image: elasticsearch:latest
+    restart: on-failure
 
 geth:
     image: ethereum/client-go:alpine
-    entrypoint: sh /root/start_geth.sh
+    entrypoint: sh /tmp/start_geth.sh
     volumes:
-       - ./:/root
-    #ports:
-    #    - '8545:8545'
-    #    - '8546:8546'
+       - ./:/tmp
+    restart: on-failure
+    ports:
+        - '8545:8545'
+        - '8546:8546'
 
 augur_node:
     build: .
     command: sh /home/augur/start_augur_node.sh
+    environment:
+        - ELASTIC_HOST=elasticsearch
+        - ELASTIC_PORT=9200
+        - GETH_HOST=geth
     volumes:
         - .:/home/augur
         - /home/augur/node_modules
@@ -21,3 +27,4 @@ augur_node:
     links:
         - elasticsearch
         - geth
+    restart: on-failure
