@@ -6,19 +6,18 @@ import { JsonRpcRequest } from "../types";
 import { isJsonRpcRequest } from "./is-json-rpc-request";
 import { dispatchJsonRpcRequest } from "./dispatch-json-rpc-request";
 import { makeJsonRpcResponse } from "./make-json-rpc-response";
-import { ErrorCallback } from "./../types"
+import { ErrorCallback } from "./../types";
 
-let app: any = express();
-let server: http.Server  = http.createServer(app);
+const app: any = express();
+const server: http.Server  = http.createServer(app);
 
-
-app.get('/', (req: any, res: any): void => {
+app.get("/", (req: any, res: any): void => {
   res.send("Hello");
 });
 
 export function runHttpServer(port: number, callback: ErrorCallback): void {
   server.listen(port, callback);
-};
+}
 
 export function runWebsocketServer(db: Knex): void {
   const websocketServer: WebSocket.Server = new WebSocket.Server({ server });

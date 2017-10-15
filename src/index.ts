@@ -28,11 +28,10 @@ if (process.env.DATABASE_URL) {
   });
 }
 
-let configuredEndpoints:any  = _.omitBy(_.merge(ethereumNodeEndpoints, {
+const configuredEndpoints: any  = _.omitBy(_.merge(ethereumNodeEndpoints, {
   http: process.env.ENDPOINT_HTTP,
   ws: process.env.ENDPOINT_WS
 }), _.isNull);
-
 
 const augur: Augur = new Augur();
 
