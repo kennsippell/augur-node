@@ -1,4 +1,4 @@
-import Augur = require("augur.js");
+import Augur from "augur.js";
 import * as Knex from "knex";
 import { FormattedLog, ErrorCallback } from "../../types";
 
@@ -10,7 +10,7 @@ export function processTokensTransferredLog(db: Knex, augur: Augur, trx: Knex.Tr
     recipient: log.to,
     token: log.token,
     value: log.value,
-    blockNumber: log.blockNumber
+    blockNumber: log.blockNumber,
   };
 
   db.transacting(trx).insert(dataToInsert).into("transfers").asCallback(callback);

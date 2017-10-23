@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as Knex from "knex";
 import { Address, Bytes32, OrdersRow } from "../../types";
+import { sortDirection } from "../../utils/sort-direction";
 
 interface Order {
   shareToken: Address;
@@ -28,14 +29,14 @@ interface Orders {
 }
 
 // market, outcome, creator, orderType, limit, sort
-export function getOpenOrders(db: Knex, marketID: Address|null, outcome: number|null, orderType: string|null, creator: Address|null, callback: (err?: Error|null, result?: any) => void): void {
+export function getOpenOrders(db: Knex, marketID: Address|null, outcome: number|null, orderType: string|null, creator: Address|null, sortBy: string|null|undefined, isSortDescending: boolean|null|undefined, limit: number|null|undefined, offset: number|null|undefined, callback: (err: Error|null, result?: any) => void): void {
   const queryData: {} = _.omitBy({
     marketID,
     outcome,
     orderType,
-    orderCreator: creator
+    orderCreator: creator,
   }, _.isNull);
-  db("orders").where(queryData).asCallback((err?: Error|null, ordersRows?: Array<OrdersRow>): void => {
+  db("orders").where(queryData).asCallback((err: Error|null, ordersRows?: Array<OrdersRow>): void => {
     if (err) return callback(err);
     if (!ordersRows || !ordersRows.length) return callback(null);
     const orders: Orders = {};
@@ -55,7 +56,7 @@ export function getOpenOrders(db: Knex, marketID: Address|null, outcome: number|
         tokensEscrowed: row.tokensEscrowed,
         sharesEscrowed: row.sharesEscrowed,
         betterOrderID: row.betterOrderID,
-        worseOrderID: row.worseOrderID
+        worseOrderID: row.worseOrderID,
       };
     });
     callback(null, orders);

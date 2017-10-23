@@ -15,6 +15,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       creationTime: 1506473474,
       creationBlockNumber: 1400000,
       creationFee: "10",
+      reportingFeeRate: "0.02",
       marketCreatorFeeRate: "0.01",
       category: "test category",
       tag1: "test tag 1",
@@ -28,7 +29,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       designatedReporter: "0x0000000000000000000000000000000000000b0b",
       designatedReportStake: "10",
       resolutionSource: "http://www.trusted-third-party.com",
-      numTicks: 24
+      numTicks: 24,
     }, {
       marketID: "0x0000000000000000000000000000000000000002",
       universe: "0x000000000000000000000000000000000000000b",
@@ -40,6 +41,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       creationTime: 1506480000,
       creationBlockNumber: 1400100,
       creationFee: "10",
+      reportingFeeRate: "0.02",
       marketCreatorFeeRate: "0.01",
       category: "test category",
       tag1: "test tag 1",
@@ -53,7 +55,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       designatedReporter: "0x0000000000000000000000000000000000000b0b",
       designatedReportStake: "10",
       resolutionSource: "http://www.trusted-third-party.com",
-      numTicks: 2
+      numTicks: 2,
     }, {
       marketID: "0x0000000000000000000000000000000000000003",
       universe: "0x000000000000000000000000000000000000000b",
@@ -65,6 +67,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       creationTime: 1506480015,
       creationBlockNumber: 1400101,
       creationFee: "10",
+      reportingFeeRate: "0.02",
       marketCreatorFeeRate: "0.01",
       category: "test category",
       tag1: "test tag 1",
@@ -78,7 +81,7 @@ exports.seed = async (knex: Knex): Promise<any> => {
       designatedReporter: "0x000000000000000000000000000000000000d00d",
       designatedReportStake: "10",
       resolutionSource: "http://www.ttp-inc.com/0000000000000000000000000000000000000003",
-      numTicks: 16
+      numTicks: 16,
     }], 1000);
   });
 };

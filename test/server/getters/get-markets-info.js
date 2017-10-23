@@ -12,7 +12,7 @@ describe("server/getters/get-markets-info", () => {
     it(t.description, (done) => {
       setupTestDb((err, db) => {
         if (err) assert.fail(err);
-        getMarketsInfo(db, t.params.universe, t.params.marketIDs, (err, marketsInfo) => {
+        getMarketsInfo(db, t.params.universe, t.params.marketIDs, t.params.sortBy, t.params.isSortDescending, t.params.limit, t.params.offset, (err, marketsInfo) => {
           t.assertions(err, marketsInfo);
           done();
         });
@@ -30,7 +30,7 @@ describe("server/getters/get-markets-info", () => {
       assert.deepEqual(marketsInfo, [
         {
           id: "0x0000000000000000000000000000000000000001",
-          branchID: "0x000000000000000000000000000000000000000b",
+          universe: "0x000000000000000000000000000000000000000b",
           type: "categorical",
           numOutcomes: 8,
           minPrice: 0,
@@ -40,6 +40,7 @@ describe("server/getters/get-markets-info", () => {
           creationTime: 1506473474,
           creationBlock: 1400000,
           creationFee: 10,
+          reportingFeeRate: 0.02,
           marketCreatorFeeRate: 0.01,
           marketCreatorFeesCollected: 0,
           category: "test category",
@@ -92,7 +93,7 @@ describe("server/getters/get-markets-info", () => {
         },
         {
           id: "0x0000000000000000000000000000000000000002",
-          branchID: "0x000000000000000000000000000000000000000b",
+          universe: "0x000000000000000000000000000000000000000b",
           type: "binary",
           numOutcomes: 2,
           minPrice: 0,
@@ -102,6 +103,7 @@ describe("server/getters/get-markets-info", () => {
           creationTime: 1506480000,
           creationBlock: 1400100,
           creationFee: 10,
+          reportingFeeRate: 0.02,
           marketCreatorFeeRate: 0.01,
           marketCreatorFeesCollected: 0,
           category: "test category",
@@ -130,7 +132,7 @@ describe("server/getters/get-markets-info", () => {
         },
         {
           id: "0x0000000000000000000000000000000000000003",
-          branchID: "0x000000000000000000000000000000000000000b",
+          universe: "0x000000000000000000000000000000000000000b",
           type: "binary",
           numOutcomes: 2,
           minPrice: 0,
@@ -140,6 +142,7 @@ describe("server/getters/get-markets-info", () => {
           creationTime: 1506480015,
           creationBlock: 1400101,
           creationFee: 10,
+          reportingFeeRate: 0.02,
           marketCreatorFeeRate: 0.01,
           marketCreatorFeesCollected: 0,
           category: "test category",
@@ -183,7 +186,7 @@ describe("server/getters/get-markets-info", () => {
       assert.deepEqual(marketsInfo, [
         {
           id: "0x0000000000000000000000000000000000000001",
-          branchID: "0x000000000000000000000000000000000000000b",
+          universe: "0x000000000000000000000000000000000000000b",
           type: "categorical",
           numOutcomes: 8,
           minPrice: 0,
@@ -193,6 +196,7 @@ describe("server/getters/get-markets-info", () => {
           creationTime: 1506473474,
           creationBlock: 1400000,
           creationFee: 10,
+          reportingFeeRate: 0.02,
           marketCreatorFeeRate: 0.01,
           marketCreatorFeesCollected: 0,
           category: "test category",
@@ -245,7 +249,7 @@ describe("server/getters/get-markets-info", () => {
         },
         {
           id: "0x0000000000000000000000000000000000000002",
-          branchID: "0x000000000000000000000000000000000000000b",
+          universe: "0x000000000000000000000000000000000000000b",
           type: "binary",
           numOutcomes: 2,
           minPrice: 0,
@@ -255,6 +259,7 @@ describe("server/getters/get-markets-info", () => {
           creationTime: 1506480000,
           creationBlock: 1400100,
           creationFee: 10,
+          reportingFeeRate: 0.02,
           marketCreatorFeeRate: 0.01,
           marketCreatorFeesCollected: 0,
           category: "test category",

@@ -27,7 +27,7 @@ describe("server/getters/get-market-info", () => {
       assert.isNull(err);
       assert.deepEqual(marketInfo, {
         id: "0x0000000000000000000000000000000000000001",
-        branchID: "0x000000000000000000000000000000000000000b",
+        universe: "0x000000000000000000000000000000000000000b",
         type: "categorical",
         numOutcomes: 8,
         minPrice: 0,
@@ -37,6 +37,7 @@ describe("server/getters/get-market-info", () => {
         creationTime: 1506473474,
         creationBlock: 1400000,
         creationFee: 10,
+        reportingFeeRate: 0.02,
         marketCreatorFeeRate: 0.01,
         marketCreatorFeesCollected: 0,
         category: "test category",

@@ -1,21 +1,22 @@
 import * as _ from "lodash";
 import * as Knex from "knex";
 import { Address, JoinedReportsMarketsRow, UIReport } from "../../types";
+import { sortDirection } from "../../utils/sort-direction";
 
 interface UIReports {
   [universe: string]: {
-    [marketID: string]: Array<UIReport>
+    [marketID: string]: Array<UIReport>,
   };
 }
 
 // Look up a user's reporting history (i.e., all reports submitted by a given reporter); should take reporter (address) as a required parameter and take market, universe, and reportingWindow all as optional parameters. For reporting windows that are complete, should also include the consensus outcome, whether the user's report matched the consensus, how much REP the user gained or lost from redistribution, and how much the user earned in reporting fees.
-export function getReportingHistory(db: Knex, reporter: Address, marketID: Address|null|undefined, universe: Address|null|undefined, reportingWindow: Address|null|undefined, callback: (err?: Error|null, result?: any) => void): void {
+export function getReportingHistory(db: Knex, reporter: Address, marketID: Address|null|undefined, universe: Address|null|undefined, reportingWindow: Address|null|undefined, sortBy: string|null|undefined, isSortDescending: boolean|null|undefined, limit: number|null|undefined, offset: number|null|undefined, callback: (err: Error|null, result?: any) => void): void {
   // { universe: { marketID: { marketID, reportingWindow, payoutNumerators, isCategorical, isScalar, isIndeterminate } } }
   const queryData: any = { reporter };
   if (marketID != null) queryData["reports.marketID"] = marketID;
   if (universe != null) queryData.universe = universe;
   if (reportingWindow != null) queryData.reportingWindow = reportingWindow;
-  const columnsToSelect = [
+  let query = db.select([
     "reports.marketID",
     "markets.universe",
     "markets.reportingWindow",
@@ -29,9 +30,12 @@ export function getReportingHistory(db: Knex, reporter: Address, marketID: Addre
     "reports.payout4",
     "reports.payout5",
     "reports.payout6",
-    "reports.payout7"
-  ];
-  db.select(columnsToSelect).from("reports").join("markets", "markets.marketID", "reports.marketID").where(queryData).orderBy("reportID").asCallback((err?: Error|null, joinedReportsMarketsRows?: Array<JoinedReportsMarketsRow>): void => {
+    "reports.payout7",
+  ]).from("reports").join("markets", "markets.marketID", "reports.marketID").where(queryData);
+  query = query.orderBy(sortBy || "reportID", sortDirection(isSortDescending, "asc"));
+  if (limit != null) query = query.limit(limit);
+  if (offset != null) query = query.offset(offset);
+  query.asCallback((err: Error|null, joinedReportsMarketsRows?: Array<JoinedReportsMarketsRow>): void => {
     if (err) return callback(err);
     if (!joinedReportsMarketsRows || !joinedReportsMarketsRows.length) return callback(null);
     const reports: UIReports = {};
@@ -48,7 +52,7 @@ export function getReportingHistory(db: Knex, reporter: Address, marketID: Addre
         isCategorical: row.marketType === "categorical",
         isScalar: row.marketType === "scalar",
         isIndeterminate: Boolean(row.isInvalid),
-        isSubmitted: true
+        isSubmitted: true,
       };
       reports[row.universe][row.marketID].push(report);
     });

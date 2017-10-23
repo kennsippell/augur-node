@@ -1,4 +1,4 @@
-import Augur = require("augur.js");
+import Augur from "augur.js";
 import * as Knex from "knex";
 
 export interface EthereumNodeEndpoints {
@@ -112,6 +112,7 @@ export interface MarketsRow {
   creationTime: number;
   creationBlockNumber: number;
   creationFee: string|number;
+  reportingFeeRate: string|number;
   marketCreatorFeeRate: string|number;
   marketCreatorFeesCollected: string|number|null;
   category: string;
@@ -158,7 +159,7 @@ export interface UIOutcomeInfo {
 
 export interface UIMarketInfo {
   id: Address;
-  branchID: Address;
+  universe: Address;
   type: string;
   numOutcomes: number;
   minPrice: string|number;
@@ -168,6 +169,7 @@ export interface UIMarketInfo {
   creationTime: number;
   creationBlock: number;
   creationFee: string|number;
+  reportingFeeRate: string|number;
   marketCreatorFeeRate: string|number;
   marketCreatorFeesCollected: string|number|null;
   category: string;
