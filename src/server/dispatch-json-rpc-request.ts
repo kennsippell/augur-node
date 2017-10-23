@@ -39,7 +39,7 @@ export function dispatchJsonRpcRequest(db: Knex, request: JsonRpcRequest, callba
     case "getMarketsAwaitingDesignatedReporting":
       return getMarketsAwaitingDesignatedReporting(db, request.params.designatedReporter, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getMarketsAwaitingReporting":
-      return getMarketsAwaitingReporting(db, request.params.reportingWindow, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
+      return getMarketsAwaitingReporting(db, request.params.reportingWindow, request.params.reportingRound, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getDisputableMarkets":
       return getDisputableMarkets(db, request.params.reportingWindow, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getReportingSummary":
