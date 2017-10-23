@@ -122,6 +122,7 @@ export interface MarketsRow {
   reportingWindow: Address;
   endTime: number;
   finalizationTime: number|null;
+  phase: number|null;
   shortDescription: string;
   longDescription: string|null;
   designatedReporter: Address;
@@ -176,6 +177,7 @@ export interface UIMarketInfo {
   reportingWindow: Address;
   endDate: number;
   finalizationTime: number|null;
+  phase: number|null;
   description: string;
   extraInfo: string|null;
   designatedReporter: Address;

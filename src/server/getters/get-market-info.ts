@@ -39,6 +39,7 @@ export function reshapeMarketsRowToUIMarketInfo(row: MarketsRow, outcomesInfo: A
     reportingWindow: row.reportingWindow,
     endDate: row.endTime,
     finalizationTime: row.finalizationTime,
+    phase: row.phase,
     description: row.shortDescription,
     extraInfo: row.longDescription,
     designatedReporter: row.designatedReporter,
