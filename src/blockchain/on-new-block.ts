@@ -10,19 +10,8 @@ export function onNewBlock(db: Knex, augur: Augur, blockNumberString: string) {
     const blockTimestamp: number = parseInt(block.timestamp, 16);
     console.log("new block:", blockNumber, blockTimestamp);
     db.transaction((trx) => {
-      let query: Knex.Raw|null = null;
-      switch (db.client.config.client) {
-        case "pg":
-          query = trx.raw(`INSERT INTO blocks ("blockNumber", "blockTimestamp") VALUES(?,?) ON CONFLICT ON CONSTRAINT blocks_pkey DO UPDATE SET "blockTimestamp" = ?`, [blockNumber, blockTimestamp, blockTimestamp]);
-          break;
-        case "sqlite3":
-          query = trx.raw(`INSERT OR REPLACE INTO blocks ("blockNumber", "blockTimestamp") VALUES(?,?)`, [blockNumber, blockTimestamp]);
-          break;
-      }
-
-      if (query === null) return logError(new Error("Using unsupported DBMS"));
-
-      query.asCallback((err: Error | null, result?: any): void => {
+      const dataToInsert: {} = { blockNumber, blockTimestamp };
+      db.transacting(trx).insert(dataToInsert).into("blocks").asCallback((err: Error|null): void => {
         if (err) {
           trx.rollback();
           logError(err);
