@@ -22,7 +22,9 @@ import { getMarketsInfo } from "./getters/get-markets-info";
 import { getOpenOrders } from "./getters/get-open-orders";
 
 export function dispatchJsonRpcRequest(db: Knex, request: JsonRpcRequest, callback: (err?: Error|null, result?: any) => void): void {
-  console.log(request);
+  function queryModifier() {
+
+  }
   switch (request.method) {
     case "getMarketInfo":
       return getMarketInfo(db, request.params.marketID, callback);
@@ -39,11 +41,11 @@ export function dispatchJsonRpcRequest(db: Knex, request: JsonRpcRequest, callba
     case "getMarketsAwaitingDesignatedReporting":
       return getMarketsAwaitingDesignatedReporting(db, request.params.designatedReporter, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getMarketsAwaitingReporting":
-      return getMarketsAwaitingReporting(db, request.params.reportingWindow, request.params.reportingRound, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
+      return getMarketsAwaitingReporting(db, request.params.reportingWindow, request.params.reportingState, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getDisputableMarkets":
       return getDisputableMarkets(db, request.params.reportingWindow, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getReportingSummary":
-      return getReportingSummary(db, request.params.reportingWindow, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
+      return getReportingSummary(db, request.params.reportingWindow, callback);
     case "getUserTradingHistory":
       return getUserTradingHistory(db, request.params.account, request.params.marketID, request.params.outcome, request.params.orderType, request.params.sortBy, request.params.isSortDescending, request.params.limit, request.params.offset, callback);
     case "getMarketPriceHistory":
